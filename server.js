@@ -93,15 +93,15 @@ const tokens = {
 };
 
 const erc20Abi = [
-    // balanceOf function ABI
     {
-        "constant": true,
-        "inputs": [{ "name": "_owner", "type": "address" }],
-        "name": "balanceOf",
-        "outputs": [{ "name": "balance", "type": "uint256" }],
-        "type": "function"
-    }
+        constant: true,
+        inputs: [{ name: "_owner", type: "address" }],
+        name: "balanceOf",
+        outputs: [{ name: "balance", type: "uint256" }],
+        type: "function",
+    },
 ];
+
 // Get balance
 // app.get('/balance/:address', async (req, res) => {
 //     try {
@@ -124,21 +124,27 @@ app.get('/balance/:address', async (req, res) => {
         // Iterate over tokens and get each balance
         for (const [tokenName, tokenAddress] of Object.entries(tokens)) {
             if (tokenAddress) {
-                // Create a contract instance for the token
-                const contract = new web3.eth.Contract(erc20Abi, tokenAddress);
+                try {
+                    // Create a contract instance for the token
+                    const contract = new web3.eth.Contract(erc20Abi, tokenAddress);
 
-                // Call balanceOf for the user's address
-                const balance = await contract.methods.balanceOf(address).call();
-                balances[tokenName] = web3.utils.fromWei(balance, 'ether');
+                    // Call balanceOf for the user's address
+                    const balance = await contract.methods.balanceOf(address).call();
+                    balances[tokenName] = web3.utils.fromWei(balance, 'ether');
+                } catch (tokenError) {
+                    console.error(`Error fetching balance for ${tokenName}:`, tokenError);
+                    balances[tokenName] = 'Error fetching balance';
+                }
             }
         }
 
         res.json(balances);
     } catch (error) {
         console.error('Error fetching balances:', error);
-        res.status(500).json({ error: 'Could not retrieve balances',error });
+        res.status(500).json({ error: 'Could not retrieve balances' });
     }
 });
+
 // Send tokens
 app.post('/send', async (req, res) => {
     const { senderPrivateKey, recipientAddress, amount } = req.body;
