@@ -119,7 +119,7 @@ app.get('/balance/:address', async (req, res) => {
     try {
         // Get the native BNB balance
         const bnbBalance = await web3.eth.getBalance(address);
-        balances['bnb_balance'] = web3.utils.fromWei(bnbBalance, 'ether') + ' BNB';
+        balances['bnb_balance'] = web3.utils.fromWei(bnbBalance, 'ether');
 
         // Iterate over tokens and get each balance
         for (const [tokenName, tokenAddress] of Object.entries(tokens)) {
