@@ -135,7 +135,7 @@ app.get('/balance/:address', async (req, res) => {
         res.json(balances);
     } catch (error) {
         console.error('Error fetching balances:', error);
-        res.status(500).json({ error: 'Could not retrieve balances' });
+        res.status(500).json({ error: 'Could not retrieve balances',error });
     }
 });
 // Send tokens
