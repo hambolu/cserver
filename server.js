@@ -12,7 +12,8 @@ app.use(express.json());
 
 // Connect to Ethereum network
 // const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`);
-const web3 = new Web3('https://bsc-dataseed.binance.org/');
+//const web3 = new Web3('https://bsc-dataseed.binance.org/'); // MAINNET
+const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');//TESTNET
 
 // Create a wallet
 app.post('/wallet', (req, res) => {
